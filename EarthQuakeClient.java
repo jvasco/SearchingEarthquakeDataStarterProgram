@@ -92,5 +92,30 @@ public class EarthQuakeClient {
             System.out.println(qe);
         }
     }
+    public ArrayList<QuakeEntry> filterByDepth(ArrayList<QuakeEntry> quakeData, double minDepth, double maxDepth)
+    {
+        ArrayList<QuakeEntry> answer = new ArrayList<QuakeEntry>();
+        for (QuakeEntry qe : quakeData)
+        {
+            if (qe.getDepth()>minDepth && qe.getDepth()<maxDepth)
+            {
+                answer.add(qe);
+            }
+        }
+         return answer;
+    }
+    public void quakesOfDepth()
+    {
+        EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + "quakes");
+        ArrayList<QuakeEntry> answer = filterByDepth(list, -10000.0, -5000.0);
+        for (QuakeEntry qe : answer)
+        {
+            System.out.println(qe.toString());
+        }
+    }
+   
     
 }
