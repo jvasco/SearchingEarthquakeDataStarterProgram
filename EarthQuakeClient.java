@@ -116,6 +116,56 @@ public class EarthQuakeClient {
             System.out.println(qe.toString());
         }
     }
-   
+    public ArrayList<QuakeEntry> filterByPhrase(ArrayList<QuakeEntry> quakeData, String where, String phrase)
+    {
+        ArrayList<QuakeEntry> answer = new ArrayList<QuakeEntry>();
+        if (where.equalsIgnoreCase("start"))
+        {
+            for (QuakeEntry qe : quakeData)
+            {
+                if (qe.getInfo().indexOf(phrase)==0)
+                {
+                    answer.add(qe);
+                }
+            }
+        }
+        else if (where.equalsIgnoreCase("any"))
+        {
+            for (QuakeEntry qe : quakeData)
+            {
+                if (qe.getInfo().indexOf(phrase)!=-1)
+                {
+                    answer.add(qe);
+                }
+            }
+        }
+        else if (where.equalsIgnoreCase("end"))
+        {
+            for (QuakeEntry qe : quakeData)
+            {
+                if (qe.getInfo().indexOf(phrase)==qe.getInfo().length()-phrase.length())
+                {
+                    answer.add(qe);
+                }
+            }
+        }
+        return answer;
+                
+    }
+   public void quakesByPhrase()
+   {
+       EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + "quakes");
+        String where = "start";
+        String phrase = "Explosion";
+       ArrayList<QuakeEntry> answer = filterByPhrase(list, where, phrase);
+       for (QuakeEntry qe : answer)
+       {
+           System.out.println(qe.getInfo());
+        }
+        System.out.println("Found " + answer.size() + " quakes that match " + phrase + " at " + where);
+   }
     
 }
