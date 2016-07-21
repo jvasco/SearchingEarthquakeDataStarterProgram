@@ -12,10 +12,23 @@ import java.util.*;
 
 public class ClosestQuakes {
     public ArrayList<QuakeEntry> getClosest(ArrayList<QuakeEntry> quakeData, Location current, int howMany) {
-        ArrayList<QuakeEntry> ret = new ArrayList<QuakeEntry>();
+        ArrayList<QuakeEntry> answer = new ArrayList<QuakeEntry>(quakeData);
         // TO DO
-
-        return ret;
+        ArrayList<QuakeEntry> realAnswer = new ArrayList<QuakeEntry>();
+        for (int j = 0; j<howMany; j++)
+        {
+            QuakeEntry minDist = answer.get(0);
+            for (int i = 1; i< answer.size(); i++)
+            {
+                if (answer.get(i).getLocation().distanceTo(current)<minDist.getLocation().distanceTo(current))
+                {
+                    minDist = answer.get(i);
+                }
+            }
+            realAnswer.add(minDist);
+            answer.remove(minDist);
+        }
+        return realAnswer;
     }
 
     public void findClosestQuakes() {
